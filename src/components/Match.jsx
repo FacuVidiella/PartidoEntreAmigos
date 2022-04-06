@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SelectPlayers from "./SelectPlayers";
 import Icon from "@mdi/react";
 import { mdiAccountCircle, mdiReload } from "@mdi/js";
@@ -13,9 +13,18 @@ export default function FootballTeams() {
   let [defenders2, setDefenders2] = useState([]);
   let [strikers2, setStrikers2] = useState([]);
   let [errorMessage, setErrorMessage] = useState("");
-  const [show, setShow] = useState(true);
 
-  const toggleShow = () => setShow(!show);
+  const handleResetForTeamOne = () => {
+    setTeamOnePlayers([]);
+    setDefenders1([]);
+    setStrikers1([]);
+  };
+
+  const handleResetForTeamTwo = () => {
+    setTeamTwoPlayers([]);
+    setDefenders2([]);
+    setStrikers2([]);
+  };
 
   function getTeamsFromChild({ team1Name, team2Name }) {
     if (team1Name) {
@@ -26,23 +35,33 @@ export default function FootballTeams() {
     }
   }
   function getPlayersFromChild(player) {
-    console.log(player);
+    let oneHasPlayer = teamOnePlayers.some((one) => one.name === player.name);
+    let twoHasPlayer = teamTwoPlayers.some((two) => two.name === player.name);
+
+    if (!teamOnePlayers.length && !teamTwoPlayers.length) {
+      setErrorMessage(null);
+    }
+
     if (player.team === "team1") {
       let validated = true;
-
-      if (player.position === "Delantero") {
-        setStrikers1([...strikers1, player]);
-      }
-      if (player.position === "Defensor") {
-        setDefenders1([...defenders1, player]);
+      if (oneHasPlayer || twoHasPlayer) {
+        validated = false;
+        setErrorMessage("El jugador ya existe");
       }
 
       teamOnePlayers.forEach((players) => {
-        if (players.name === player.name) {
-          validated = false;
+        if (player.position === "Delantero" && players.name !== player.name) {
+          setStrikers1([...strikers1, player]);
+          setErrorMessage("No pueden haber más de dos delanteros por equipo");
         }
+        if (player.position === "Defenser" && players.name !== player.name) {
+          setDefenders1([...defenders1, player]);
+          setErrorMessage("No pueden haber más de dos defensores por equipo");
+        }
+
         if (players.position === "Arquero" && player.position === "Arquero") {
           validated = false;
+          setErrorMessage("No pueden haber más de un arquero por equipo");
         }
         if (strikers1.length >= 2 && player.position === "Delantero") {
           validated = false;
@@ -58,20 +77,23 @@ export default function FootballTeams() {
       }
     } else if (player.team === "team2") {
       let validated = true;
-
-      if (player.position === "Delantero") {
-        setStrikers2([...strikers2, player]);
-      }
-      if (player.position === "Defensor") {
-        setDefenders2([...defenders2, player]);
+      if (oneHasPlayer || twoHasPlayer) {
+        validated = false;
+        setErrorMessage("El jugador ya existe");
       }
 
       teamTwoPlayers.forEach((players) => {
-        if (players.name === player.name) {
-          validated = false;
+        if (player.position === "Delantero" && players.name !== player.name) {
+          setStrikers2([...strikers2, player]);
+          setErrorMessage("No pueden haber más de dos delanteros por equipo");
+        }
+        if (player.position === "Defenser" && players.name !== player.name) {
+          setDefenders2([...defenders2, player]);
+          setErrorMessage("No pueden haber más de dos defensores por equipo");
         }
         if (players.position === "Arquero" && player.position === "Arquero") {
           validated = false;
+          setErrorMessage("No pueden haber más de un arquero por equipo");
         }
         if (
           strikers2.length &&
@@ -92,6 +114,8 @@ export default function FootballTeams() {
       if (validated) {
         setTeamTwoPlayers([...teamTwoPlayers, player]);
         setErrorMessage(null);
+      } else {
+        setErrorMessage("El jugador ya existe");
       }
     } else {
       setErrorMessage(player);
@@ -158,9 +182,9 @@ export default function FootballTeams() {
                 className="btn btn-primary"
                 type="button"
                 style={{ borderRadius: "5px" }}
-                onClick={() => setTeamOnePlayers([])}
+                onClick={handleResetForTeamOne}
               >
-                <Icon path={mdiReload} size={1} />
+                resetear
               </button>
             ) : null}
           </div>
@@ -205,9 +229,9 @@ export default function FootballTeams() {
                 className="btn btn-primary"
                 type="button"
                 style={{ borderRadius: "5px" }}
-                onClick={() => setTeamTwoPlayers([])}
+                onClick={handleResetForTeamTwo}
               >
-                <Icon path={mdiReload} size={1} />
+                resetear
               </button>
             ) : null}
           </div>

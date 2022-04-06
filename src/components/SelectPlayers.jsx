@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { Spinner } from "react-bootstrap";
 
 export default function SelectPlayers({ getNames, getPlayers }) {
   let [validation, setValidation] = useState({
@@ -30,15 +31,15 @@ export default function SelectPlayers({ getNames, getPlayers }) {
     }
   };
   let [position, setPosition] = useState("");
-
+  let [load, setLoad] = useState(false);
   let handlePositions = (e) => {
     setPosition(e);
   };
   let [chosenTeam, setChosenTeam] = useState("");
   let [message, setMessage] = useState("");
   let setSelectedPlayer = [];
-  let [players, setPlayers] = useState([]);
   let getData = async (name, lastName) => {
+    setLoad(true);
     let response = await axios
       .get(
         `https://apiv3.apifootball.com/?action=get_players&player_name=${name} ${lastName}&APIkey=9db2482cf6f788a256a3b0d558805042d498c23f862d7407948c6ae77a39bb19`
@@ -69,11 +70,13 @@ export default function SelectPlayers({ getNames, getPlayers }) {
       if (setSelectedPlayer.length) {
         getPlayers(setSelectedPlayer[0]);
       }
+      setLoad(false);
     } else {
       setMessage(
         "El jugador que ingresó no fue encontrado u olvidó completar algún campo"
       );
       getPlayers(message);
+      setLoad(false);
     }
   };
 
@@ -137,6 +140,7 @@ export default function SelectPlayers({ getNames, getPlayers }) {
       </div>
 
       <hr />
+
       <div className={show ? "card" : "visually-hidden"}>
         <h4 className="card-header">Escribe el nombre de un jugador</h4>
         <div className="input-group mb-3 card-body">
@@ -209,14 +213,25 @@ export default function SelectPlayers({ getNames, getPlayers }) {
             </label>
           </div>
         </div>
-
         <button
           onClick={handleClick}
           type="button"
           className="btn btn-primary m-1"
         >
           Agregar jugador
-        </button>
+          {load ? (
+            <div>
+              <Spinner
+                as="span"
+                animation="grow"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
+              <span> Loading...</span>
+            </div>
+          ) : null}
+        </button>{" "}
       </div>
       <hr />
     </div>
