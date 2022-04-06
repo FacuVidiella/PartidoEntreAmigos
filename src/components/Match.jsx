@@ -48,26 +48,27 @@ export default function FootballTeams() {
         validated = false;
         setErrorMessage("El jugador ya existe");
       }
-
+      if (!validated) {
+        return;
+      }
+      if (player.position === "Delantero" && strikers1.length < 2) {
+        setStrikers1([...strikers1, player]);
+      }
+      if (strikers1.length >= 2 && player.position === "Delantero") {
+        validated = false;
+        setErrorMessage("No pueden haber más de dos delanteros por equipo");
+      }
+      if (player.position === "Defensor" && defenders1.length < 2) {
+        setDefenders1([...defenders1, player]);
+      }
+      if (defenders1.length >= 2 && player.position === "Defensor") {
+        validated = false;
+        setErrorMessage("No pueden haber más de dos defensores por equipo");
+      }
       teamOnePlayers.forEach((players) => {
-        if (player.position === "Delantero" && players.name !== player.name) {
-          setStrikers1([...strikers1, player]);
-          setErrorMessage("No pueden haber más de dos delanteros por equipo");
-        }
-        if (player.position === "Defenser" && players.name !== player.name) {
-          setDefenders1([...defenders1, player]);
-          setErrorMessage("No pueden haber más de dos defensores por equipo");
-        }
-
         if (players.position === "Arquero" && player.position === "Arquero") {
           validated = false;
-          setErrorMessage("No pueden haber más de un arquero por equipo");
-        }
-        if (strikers1.length >= 2 && player.position === "Delantero") {
-          validated = false;
-        }
-        if (defenders1.length >= 2 && player.position === "Defensor") {
-          validated = false;
+          setErrorMessage("No puede haber más de un arquero por equipo");
         }
       });
 
@@ -82,40 +83,33 @@ export default function FootballTeams() {
         setErrorMessage("El jugador ya existe");
       }
 
+      if (!validated) {
+        return;
+      }
+
+      if (player.position === "Delantero" && strikers2.length < 2) {
+        setStrikers2([...strikers2, player]);
+      }
+      if (strikers2.length >= 2 && player.position === "Delantero") {
+        validated = false;
+        setErrorMessage("No pueden haber más de dos delanteros por equipo");
+      }
+      if (player.position === "Defensor" && defenders2.length < 2) {
+        setDefenders2([...defenders2, player]);
+      }
+      if (defenders2.length >= 2 && player.position === "Defensor") {
+        validated = false;
+        setErrorMessage("No pueden haber más de dos defensores por equipo");
+      }
       teamTwoPlayers.forEach((players) => {
-        if (player.position === "Delantero" && players.name !== player.name) {
-          setStrikers2([...strikers2, player]);
-          setErrorMessage("No pueden haber más de dos delanteros por equipo");
-        }
-        if (player.position === "Defenser" && players.name !== player.name) {
-          setDefenders2([...defenders2, player]);
-          setErrorMessage("No pueden haber más de dos defensores por equipo");
-        }
         if (players.position === "Arquero" && player.position === "Arquero") {
           validated = false;
-          setErrorMessage("No pueden haber más de un arquero por equipo");
-        }
-        if (
-          strikers2.length &&
-          strikers2.length >= 2 &&
-          player.position === "Delantero"
-        ) {
-          validated = false;
-        }
-        if (
-          defenders2.length &&
-          defenders2.length >= 2 &&
-          player.position === "Defensor"
-        ) {
-          validated = false;
+          setErrorMessage("No puede haber más de un arquero por equipo");
         }
       });
-
       if (validated) {
         setTeamTwoPlayers([...teamTwoPlayers, player]);
         setErrorMessage(null);
-      } else {
-        setErrorMessage("El jugador ya existe");
       }
     } else {
       setErrorMessage(player);
