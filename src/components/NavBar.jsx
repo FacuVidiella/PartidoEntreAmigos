@@ -1,5 +1,3 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import Icon from "@mdi/react";
 import { mdiSoccer } from "@mdi/js";
 
@@ -23,9 +21,7 @@ export default function NavBar() {
         />
       </div>
       <div style={{ flex: "2", textAlign: "center" }}>
-        <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
-          <h5>Inicio</h5>
-        </Link>
+        <h5>Inicio</h5>
       </div>
       <div style={{ flex: "1", textAlign: "left" }}>
         <h5>Acerca de...</h5>

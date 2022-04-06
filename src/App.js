@@ -1,4 +1,4 @@
-import { LandingPage, Home, NavBar, Footer } from "./components/index";
+import { Home, NavBar, Footer } from "./components/index";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -7,8 +7,7 @@ function App() {
       <BrowserRouter>
         <NavBar />
         <Routes>
-          <Route exact path="/" element={<LandingPage />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </BrowserRouter>
       <Footer />
