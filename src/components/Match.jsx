@@ -223,12 +223,6 @@ export default function FootballTeams() {
                         )}
                         <h5 className="card-header">{player.name}</h5>
                         <h5>{player.position}</h5>
-                        <button
-                          variant="dark"
-                          onClick={() => setTeamTwoPlayers(this.remove(i))}
-                        >
-                          X
-                        </button>
                       </div>
                     </div>
                   );
