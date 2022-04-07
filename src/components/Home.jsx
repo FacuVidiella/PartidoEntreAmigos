@@ -35,10 +35,10 @@ export default function Home() {
   return (
     <div className="container mt-5">
       <h1 className="display-4">Bienvenido!</h1>
-      <p className="lead">Hace click para armar el partido de tus sueños</p>
+      <p className="lead">Hace click para Empezar</p>
       <hr className="my-4" />
       <button type="button" className="btn btn-primary" onClick={handleClick}>
-        Empezar
+        Inicio
       </button>
       <p className="lead" style={{ height: "600px" }}></p>
       <div className="row">

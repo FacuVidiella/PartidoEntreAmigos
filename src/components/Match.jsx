@@ -2,6 +2,7 @@ import { useState } from "react";
 import SelectPlayers from "./SelectPlayers";
 import Icon from "@mdi/react";
 import { mdiAccountCircle, mdiReload } from "@mdi/js";
+import { Button } from "bootstrap";
 
 export default function FootballTeams() {
   let [teamOneName, setTeamOneName] = useState("Equipo 1");
@@ -40,6 +41,15 @@ export default function FootballTeams() {
 
     if (!teamOnePlayers.length && !teamTwoPlayers.length) {
       setErrorMessage(null);
+    }
+    if (player && player.team === "randomized") {
+      let bothTeams = ["1", "2"];
+      let randomTeam = bothTeams[Math.floor(Math.random() * bothTeams.length)];
+      if (randomTeam === "1") {
+        player.team = "team1";
+      } else if (randomTeam === "2") {
+        player.team = "team2";
+      }
     }
 
     if (player.team === "team1") {
@@ -123,10 +133,10 @@ export default function FootballTeams() {
         getPlayers={getPlayersFromChild}
       />
       <h5 style={{ textAlign: "center" }}>
-        Acá vas a poder visualizar tu partido ideal
+        Acá vas a poder visualizar tu partido
       </h5>
       <p style={{ textAlign: "center" }}>
-        (Clickea en el botón para resetear un equipo)
+        (Clickeá en el botón para resetear un equipo)
       </p>
       {errorMessage ? (
         <h5 style={{ textAlign: "center", color: "red" }}>* {errorMessage}</h5>
@@ -213,6 +223,12 @@ export default function FootballTeams() {
                         )}
                         <h5 className="card-header">{player.name}</h5>
                         <h5>{player.position}</h5>
+                        <button
+                          variant="dark"
+                          onClick={() => setTeamTwoPlayers(this.remove(i))}
+                        >
+                          X
+                        </button>
                       </div>
                     </div>
                   );

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { Spinner } from "react-bootstrap";
+import Icon from "@mdi/react";
+import { mdiAccount } from "@mdi/js";
 
 export default function SelectPlayers({ getNames, getPlayers }) {
   let [validation, setValidation] = useState({
@@ -40,18 +42,8 @@ export default function SelectPlayers({ getNames, getPlayers }) {
   let setSelectedPlayer = [];
   let getData = async (name, lastName) => {
     setLoad(true);
-    let response = await axios
-      .get(
-        `https://apiv3.apifootball.com/?action=get_players&player_name=${name} ${lastName}&APIkey=9db2482cf6f788a256a3b0d558805042d498c23f862d7407948c6ae77a39bb19`
-      )
-      .then((res) => res.data);
 
-    if (
-      response &&
-      !response.message &&
-      position !== "choose" &&
-      position !== ""
-    ) {
+    if (position !== "choose" && position !== "") {
       if (position === "offense") {
         position = "Delantero";
       } else if (position === "defense") {
@@ -61,8 +53,7 @@ export default function SelectPlayers({ getNames, getPlayers }) {
       }
 
       setSelectedPlayer.push({
-        name: response[0].player_name,
-        img: response[0].player_image,
+        name: `${name} ${lastName}`,
         position,
         team: chosenTeam,
       });
@@ -210,6 +201,19 @@ export default function SelectPlayers({ getNames, getPlayers }) {
             />
             <label className="form-check-label" htmlFor="flexRadioDefault1">
               Equipo 2
+            </label>
+          </div>
+          <div className="form-check mb-3 ">
+            <input
+              className="form-check-input"
+              type="radio"
+              name="flexRadioDefault"
+              id="flexRadioDefault1"
+              value="randomized"
+              onInput={(event) => setChosenTeam(event.target.value)}
+            />
+            <label className="form-check-label" htmlFor="flexRadioDefault1">
+              Randomizar
             </label>
           </div>
         </div>
